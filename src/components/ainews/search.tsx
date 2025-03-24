@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import NewsCard from './newscard';
 
@@ -44,10 +44,9 @@ export default function NewsSearchComponent() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
 
   // Fetch news based on selected parameters with exponential backoff for rate limits
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -70,7 +69,6 @@ export default function NewsSearchComponent() {
       // Ensure we have an items array to work with
       if (response.data && response.data.items) {
         setNews(response.data.items);
-        setRetryCount(0); // Reset retry count on success
       } else {
         setNews([]);
         setError('No news data available for the selected filters.');
@@ -88,18 +86,17 @@ export default function NewsSearchComponent() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Manual retry function
-  const handleRetry = () => {
-    setRetryCount(prev => prev + 1);
-    fetchNews();
-  };
+  }, [category, country, language]);
 
   // Fetch news when component mounts or parameters change
   useEffect(() => {
     fetchNews();
-  }, [category, country, language]);
+  }, [fetchNews]);
+
+  // Manual retry function
+  const handleRetry = () => {
+    fetchNews();
+  };
 
   return (
     <div className="space-y-6 bg-white p-6 rounded-lg shadow-md">

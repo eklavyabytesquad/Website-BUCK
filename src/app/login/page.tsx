@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 // Set up axios instance
 const api = axios.create({
@@ -106,18 +106,24 @@ export default function Login() {
         // If response doesn't have expected tokens
         throw new Error('Invalid authentication response');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Login error:', err);
       
-      if (err.response?.status === 401 || err.response?.status === 400) {
-        setError('Invalid username or password. Please try again.');
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401 || err.response?.status === 400) {
+          setError('Invalid username or password. Please try again.');
+        } else {
+          setError(
+            err.response?.data?.detail || 
+            err.response?.data?.message || 
+            err.message ||
+            'Login failed. Please check your credentials and try again.'
+          );
+        }
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
-        setError(
-          err.response?.data?.detail || 
-          err.response?.data?.message || 
-          err.message ||
-          'Login failed. Please check your credentials and try again.'
-        );
+        setError('An unexpected error occurred');
       }
     } finally {
       setIsLoading(false);

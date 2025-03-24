@@ -15,7 +15,6 @@ const ProfileIcon = () => <svg className="w-5 h-5" fill="currentColor" viewBox="
 
 export default function DashboardNavbar() {
   const { userInfo, logout } = useAuth();
-  const router = useRouter();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
