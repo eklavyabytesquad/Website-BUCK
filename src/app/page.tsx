@@ -1,176 +1,311 @@
+"use client"
 
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { 
+  ChartBarIcon, 
+  SearchIcon,  
+  DatabaseIcon, 
+  NewspaperIcon 
+} from 'lucide-react';
 
 export default function Home() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll();
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col bg-white">
-      {/* Hero Section */}
-      <section className="bg-green-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Connecting Startups with the Right Investors
-              </h1>
-              <p className="text-xl mb-8">
-                BUCK is a platform that bridges the gap between innovative startups and forward-thinking investors. Join our community and take your business to the next level.
-              </p>
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <Link href="/startups/register" className="px-6 py-3 bg-white text-green-600 font-semibold rounded-md hover:bg-gray-100 text-center">
-                  Register Startup
-                </Link>
-                <Link href="/investors/register" className="px-6 py-3 bg-green-800 text-white font-semibold rounded-md hover:bg-green-900 text-center">
-                  Become an Investor
-                </Link>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-lg">
-                {/* Placeholder for hero image - replace with your actual image */}
-                <div className="bg-gray-200 w-full h-64 md:h-80 rounded relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                    Hero Image Placeholder
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <main className="relative bg-[#0a192f] text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <div 
+        className="absolute inset-0 z-0 bg-gradient-to-br from-[#0a192f] via-[#112240] to-[#0a192f] opacity-90"
+        style={{
+          transform: `translateY(${backgroundY}px)`,
+          transition: 'transform 0.2s ease-out'
+        }}
+      />
 
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">How BUCK Works</h2>
-            <p className="mt-4 text-xl text-gray-600">Simple, transparent, and effective</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 bg-green-50 rounded-lg">
-              <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Register</h3>
-              <p className="text-gray-600">Create your profile as a startup or investor and showcase your strengths.</p>
-            </div>
-            
-            <div className="p-6 bg-green-50 rounded-lg">
-              <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Connect</h3>
-              <p className="text-gray-600">Find the perfect match based on industry, funding stage, and investment goals.</p>
-            </div>
-            
-            <div className="p-6 bg-green-50 rounded-lg">
-              <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Grow</h3>
-              <p className="text-gray-600">Secure funding and mentorship to take your startup to new heights.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Startups Showcase */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Featured Startups</h2>
-            <p className="mt-4 text-xl text-gray-600">Discover innovative ventures seeking investment</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="h-48 bg-gray-200 relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                    Startup Image
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Startup {i}</h3>
-                  <p className="text-green-600 mb-2">Tech &bull; Series A</p>
-                  <p className="text-gray-600 mb-4">A brief description of what this startup does and why its worth investing in.</p>
-                  <Link href={`/startups/${i}`} className="text-green-600 font-medium hover:text-green-800">
-                    Learn More &rarr;
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-12 text-center">
-            <Link href="/startups" className="px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700">
-              View All Startups
+      {/* Hero Section with 3D-like Parallax */}
+      <section 
+        ref={ref}
+        className="relative min-h-screen flex items-center justify-center px-4 py-16 overflow-hidden"
+      >
+        <motion.div 
+          style={{ y: textY }}
+          className="relative z-10 max-w-6xl mx-auto text-center"
+        >
+          <motion.h1 
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500"
+          >
+            BUCKz: AI-Powered Startup Ecosystem
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-xl md:text-2xl mb-8 text-gray-300"
+          >
+            Revolutionizing Startup Funding with Artificial Intelligence
+          </motion.p>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+            className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+          >
+            <Link href="/startups/register" className="px-8 py-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg">
+              Launch Your Startup
             </Link>
+            <Link href="/investors/register" className="px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg">
+              Invest Intelligently
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        {/* Floating Particle Background */}
+        <div className="absolute inset-0 z-0 opacity-20">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ 
+                x: Math.random() * window.innerWidth, 
+                y: Math.random() * window.innerHeight,
+                opacity: 0
+              }}
+              animate={{ 
+                x: [
+                  Math.random() * window.innerWidth, 
+                  Math.random() * window.innerWidth, 
+                  Math.random() * window.innerWidth
+                ],
+                y: [
+                  Math.random() * window.innerHeight, 
+                  Math.random() * window.innerHeight, 
+                  Math.random() * window.innerHeight
+                ],
+                opacity: [0, 0.5, 0]
+              }}
+              transition={{
+                duration: Math.random() * 10 + 5,
+                repeat: Infinity,
+                repeatType: "loop"
+              }}
+              className="absolute w-2 h-2 bg-blue-500 rounded-full"
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* AI-Powered Features Section */}
+      <section className="relative bg-[#112240] py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+              AI-Driven Startup Intelligence
+            </h2>
+            <p className="text-xl text-gray-300">
+              Cutting-edge features powered by artificial intelligence
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {[
+              { 
+                icon: <NewsIcon />, 
+                title: "AI News Aggregator", 
+                description: "Real-time industry insights and startup trends",
+                color: "from-blue-500 to-purple-600"
+              },
+              { 
+                icon: <AnalyticsIcon />, 
+                title: "Predictive Analytics", 
+                description: "Advanced startup performance forecasting",
+                color: "from-green-400 to-blue-500"
+              },
+              { 
+                icon: <SearchIcon />, 
+                title: "AI-Powered Search", 
+                description: "Intelligent matching of startups and investors",
+                color: "from-purple-500 to-pink-500"
+              },
+              { 
+                icon: <SearchIcon />, 
+                title: "Investor Finance Management", 
+                description: "Automated portfolio tracking and optimization",
+                color: "from-red-500 to-yellow-500"
+              },
+              { 
+                icon: <FundingIcon />, 
+                title: "Funding Analysis", 
+                description: "Deep insights into funding opportunities",
+                color: "from-pink-500 to-red-500"
+              },
+              { 
+                icon: <FundingIcon />, 
+                title: "Data Aggregation", 
+                description: "Comprehensive startup ecosystem intelligence",
+                color: "from-yellow-400 to-orange-500"
+              }
+            ].map((feature, index) => (
+              <motion.div 
+                key={index}
+                variants={itemVariants}
+                className="bg-[#0a192f] p-6 rounded-lg shadow-xl hover:scale-105 transition-transform"
+              >
+                <div className={`w-16 h-16 mb-4 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center`}>
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Money Animation Section */}
+      <section className="relative bg-[#0a192f] py-16 px-4 overflow-hidden">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+              Funding Ecosystem Reimagined
+            </h2>
+            <p className="text-xl text-gray-300">
+              Transform your startup journey with intelligent financial tools
+            </p>
+          </motion.div>
+
+          {/* Money Flow Animation Placeholder */}
+          <div className="relative h-64 w-full bg-[#112240] rounded-lg overflow-hidden">
+            <div className="absolute inset-0 opacity-20">
+              {[...Array(100)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ 
+                    x: -100, 
+                    y: Math.random() * 300,
+                    opacity: 0
+                  }}
+                  animate={{ 
+                    x: window.innerWidth + 100,
+                    y: [
+                      Math.random() * 300, 
+                      Math.random() * 300, 
+                      Math.random() * 300
+                    ],
+                    opacity: [0, 0.5, 0]
+                  }}
+                  transition={{
+                    duration: Math.random() * 10 + 5,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                  className="absolute w-2 h-2 bg-green-500 rounded-full"
+                />
+              ))}
+            </div>
+            <div className="relative z-10 flex items-center justify-center h-full">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="text-center"
+              >
+                <h3 className="text-3xl font-bold text-green-400 mb-4">
+                  $500M+
+                </h3>
+                <p className="text-gray-300">
+                  Total Funding Facilitated Through BUCKz
+                </p>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Success Stories</h2>
-            <p className="mt-4 text-xl text-gray-600">Hear from our community</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-6 bg-green-50 rounded-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">John Doe</h4>
-                  <p className="text-gray-600">CEO, TechStart</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                BUCK helped us connect with investors who truly understood our vision. Within 3 months, we secured the funding we needed to scale our operations.
-              </p>
-            </div>
-            
-            <div className="p-6 bg-green-50 rounded-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">Jane Smith</h4>
-                  <p className="text-gray-600">Angel Investor</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                As an investor, BUCK has streamlined my deal flow. The platforms curation and analytics help me find promising startups that align with my investment thesis.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-green-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Take the Next Step?</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Join BUCK today and be part of a growing community thats reshaping the startup ecosystem.
+      {/* Final CTA */}
+      <section className="bg-[#112240] py-16 px-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto text-center"
+        >
+          <h2 className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+            Join the Future of Startup Funding
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            Leverage AI-powered insights to transform your startup ecosystem
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href="/signup" className="px-8 py-4 bg-white text-green-600 font-semibold rounded-md hover:bg-gray-100">
-              Sign Up Now
+            <Link href="/signup" className="px-10 py-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg">
+              Get Started
             </Link>
-            <Link href="/contact" className="px-8 py-4 bg-green-800 text-white font-semibold rounded-md hover:bg-green-900">
-              Contact Us
+            <Link href="/demo" className="px-10 py-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg">
+              Request Demo
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </main>
   );
 }
+
+// Icon Components
+function NewsIcon() {
+  return <NewspaperIcon className="w-8 h-8 text-white" />;
+}
+
+function AnalyticsIcon() {
+  return <ChartBarIcon className="w-8 h-8 text-white" />;
+}
+
+
+function FundingIcon() {
+  return <DatabaseIcon className="w-8 h-8 text-white" />;
+}
+
