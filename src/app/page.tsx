@@ -10,6 +10,7 @@ import {
   NewspaperIcon 
 } from 'lucide-react';
 
+
 export default function Home() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
