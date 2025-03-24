@@ -1,21 +1,35 @@
 "use client"
 
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  ChartBarIcon, 
-  SearchIcon,  
-  DatabaseIcon, 
-  NewspaperIcon 
-} from 'lucide-react';
-
 
 export default function Home() {
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0
+  });
   const ref = useRef(null);
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
+
+  // Effect to handle window size and prevent SSR issues
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    // Ensure this only runs on client-side
+    if (typeof window !== 'undefined') {
+      handleResize(); // Initial call
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -36,6 +50,43 @@ export default function Home() {
       opacity: 1
     }
   };
+
+  // Generate particles safely
+  const generateParticles = () => {
+    if (windowSize.width === 0 || windowSize.height === 0) return [];
+    
+    return [...Array(50)].map((_, i) => ({
+      id: i,
+      x: Math.random() * windowSize.width,
+      y: Math.random() * windowSize.height,
+      size: Math.random() * 3
+    }));
+  };
+
+  // Feature icons as SVG components
+  const NewsIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1h2a2 2 0 012 2v9a3 3 0 01-3 3zm0-2a1 1 0 001-1v-6a1 1 0 00-1-1h-2v7h1zM5 8v10h14V8H5zm0 0V6h10v2H5z" />
+    </svg>
+  );
+
+  const AnalyticsIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+  );
+
+  const SearchIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  );
+
+  const DatabaseIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+    </svg>
+  );
 
   return (
     <main className="relative bg-[#0a192f] text-white overflow-x-hidden">
@@ -90,24 +141,24 @@ export default function Home() {
 
         {/* Floating Particle Background */}
         <div className="absolute inset-0 z-0 opacity-20">
-          {[...Array(50)].map((_, i) => (
+          {generateParticles().map((particle) => (
             <motion.div
-              key={i}
+              key={particle.id}
               initial={{ 
-                x: Math.random() * window.innerWidth, 
-                y: Math.random() * window.innerHeight,
+                x: particle.x, 
+                y: particle.y,
                 opacity: 0
               }}
               animate={{ 
                 x: [
-                  Math.random() * window.innerWidth, 
-                  Math.random() * window.innerWidth, 
-                  Math.random() * window.innerWidth
+                  particle.x, 
+                  particle.x + (Math.random() * 100 - 50), 
+                  particle.x + (Math.random() * 100 - 50)
                 ],
                 y: [
-                  Math.random() * window.innerHeight, 
-                  Math.random() * window.innerHeight, 
-                  Math.random() * window.innerHeight
+                  particle.y, 
+                  particle.y + (Math.random() * 100 - 50), 
+                  particle.y + (Math.random() * 100 - 50)
                 ],
                 opacity: [0, 0.5, 0]
               }}
@@ -173,13 +224,13 @@ export default function Home() {
                 color: "from-red-500 to-yellow-500"
               },
               { 
-                icon: <FundingIcon />, 
+                icon: <DatabaseIcon />, 
                 title: "Funding Analysis", 
                 description: "Deep insights into funding opportunities",
                 color: "from-pink-500 to-red-500"
               },
               { 
-                icon: <FundingIcon />, 
+                icon: <DatabaseIcon />, 
                 title: "Data Aggregation", 
                 description: "Comprehensive startup ecosystem intelligence",
                 color: "from-yellow-400 to-orange-500"
@@ -222,7 +273,7 @@ export default function Home() {
           {/* Money Flow Animation Placeholder */}
           <div className="relative h-64 w-full bg-[#112240] rounded-lg overflow-hidden">
             <div className="absolute inset-0 opacity-20">
-              {[...Array(100)].map((_, i) => (
+              {windowSize.width > 0 && [...Array(100)].map((_, i) => (
                 <motion.div
                   key={i}
                   initial={{ 
@@ -231,7 +282,7 @@ export default function Home() {
                     opacity: 0
                   }}
                   animate={{ 
-                    x: window.innerWidth + 100,
+                    x: windowSize.width + 100,
                     y: [
                       Math.random() * 300, 
                       Math.random() * 300, 
@@ -266,9 +317,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Final CTA */}
-      <section className="bg-[#112240] py-16 px-4">
+     
+        {/* Final CTA */}
+        <section className="bg-[#112240] py-16 px-4">
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -295,18 +346,3 @@ export default function Home() {
     </main>
   );
 }
-
-// Icon Components
-function NewsIcon() {
-  return <NewspaperIcon className="w-8 h-8 text-white" />;
-}
-
-function AnalyticsIcon() {
-  return <ChartBarIcon className="w-8 h-8 text-white" />;
-}
-
-
-function FundingIcon() {
-  return <DatabaseIcon className="w-8 h-8 text-white" />;
-}
-
