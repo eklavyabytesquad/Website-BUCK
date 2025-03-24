@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import DashboardNavbar from '../../../components/dashbaord/navbar';
 import NewsSearchComponent from '../../../components/ainews/search';
 

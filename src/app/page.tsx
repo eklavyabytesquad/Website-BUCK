@@ -1,4 +1,4 @@
-import Image from 'next/image';
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -99,7 +99,7 @@ export default function Home() {
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Startup {i}</h3>
                   <p className="text-green-600 mb-2">Tech &bull; Series A</p>
-                  <p className="text-gray-600 mb-4">A brief description of what this startup does and why it's worth investing in.</p>
+                  <p className="text-gray-600 mb-4">A brief description of what this startup does and why its worth investing in.</p>
                   <Link href={`/startups/${i}`} className="text-green-600 font-medium hover:text-green-800">
                     Learn More &rarr;
                   </Link>
@@ -134,7 +134,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-700">
-                "BUCK helped us connect with investors who truly understood our vision. Within 3 months, we secured the funding we needed to scale our operations."
+                BUCK helped us connect with investors who truly understood our vision. Within 3 months, we secured the funding we needed to scale our operations.
               </p>
             </div>
             
@@ -147,7 +147,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-700">
-                "As an investor, BUCK has streamlined my deal flow. The platform's curation and analytics help me find promising startups that align with my investment thesis."
+                As an investor, BUCK has streamlined my deal flow. The platforms curation and analytics help me find promising startups that align with my investment thesis.
               </p>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Take the Next Step?</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Join BUCK today and be part of a growing community that's reshaping the startup ecosystem.
+            Join BUCK today and be part of a growing community thats reshaping the startup ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link href="/signup" className="px-8 py-4 bg-white text-green-600 font-semibold rounded-md hover:bg-gray-100">
